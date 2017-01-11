@@ -6,6 +6,20 @@ import weaver.general.Util;
 import weaver.interfaces.workflow.action.Action;
 import weaver.soa.workflow.request.RequestInfo;
 
+/**
+ * Updated by adore on 2017/01/11.
+ * 凭证摘要
+ * 1.如果冲销区有勾选项：
+ * 生成规则（一）：主表报销类型"D01-普通类报销，D03-业务招待费，D04-资讯费用-软件开发费和维护费”，
+ * “OA预付款申请编号”+过账日期“月份”+“供应商名称”+费用项目名称”
+ * 生成规则（二）：主表报销类型" D02-资产类报销”，“OA预付款申请编号”+过账日期“月份”+“供应商名称”+资产描述”
+ * <p>
+ * 2.如果冲销区无勾选项：
+ * 生成规则（一）：主表报销类型"D01-普通类报销，D03-业务招待费，D04-资讯费用-软件开发费和维护费”，
+ * 过账日期“月份”+“供应商名称”+费用项目名称”
+ * 生成规则（二）：主表报销类型" D02-资产类报销”，过账日期“月份”+“供应商名称”+资产描述”
+ */
+
 public class FinanceExpenseFI08 implements Action {
 
     BaseBean log = new BaseBean();//定义写入日志的对象
@@ -25,14 +39,6 @@ public class FinanceExpenseFI08 implements Action {
         String mainID = "";
         String expType = "";//报销类型
         String applyDate = "";//过账日期
-        String supplName = "";//供应商名称
-
-        //主表
-        String PZZY = "";//凭证摘要
-        //明细1
-        String FYXMMC = "";//费用项目名称
-        //明细3
-        String XZ = "";//冲销选择
 
         String sql = " Select tablename From Workflow_bill Where id in ("
                 + " Select formid From workflow_base Where id= "
@@ -44,6 +50,7 @@ public class FinanceExpenseFI08 implements Action {
         }
 
         if (!"".equals(tableName)) {
+            String PZZY = "";//凭证摘要
             tableNamedt = tableName + "_dt1";
             tableNamedt3 = tableName + "_dt3";
 
@@ -54,7 +61,6 @@ public class FinanceExpenseFI08 implements Action {
                 mainID = Util.null2String(rs.getString("ID"));
                 expType = Util.null2String(rs.getString("BXLX"));
                 applyDate = Util.null2String(rs.getString("GZRQ"));
-                supplName = Util.null2String(rs.getString("GYSMC"));
                 applyDate = applyDate.substring(5, 7);
             }
 
@@ -73,10 +79,6 @@ public class FinanceExpenseFI08 implements Action {
                 sql = "select * from " + tableNamedt3 + " where mainid=" + mainID;
                 rs_dt.execute(sql);
                 log.writeLog("OA预付款申请编号:" + sql);
-                String temp = "";//资产描述
-                String flag = "";
-                String temp1 = "";//费用项目名称
-                String flag1 = "";
                 while (rs_dt.next()) {
                     applyNum = Util.null2String(rs_dt.getString("YFKBH"));
                 }
@@ -88,29 +90,25 @@ public class FinanceExpenseFI08 implements Action {
                 while (rs_dt.next()) {
                     String zcms = Util.null2String(rs_dt.getString("ZCMS"));
                     String pro_id = Util.null2String(rs_dt.getString("FYXMMC"));
-                    temp += flag + zcms;
-                    flag = "/";
+                    String supllierName = Util.null2String(rs_dt.getString("GYSMC"));
+                    String dtid = Util.null2String(rs_dt.getString("id"));
                     String sql_name = " select fyxmmc from uf_fyxmdzb where id=" + pro_id;
+                    String pro_name = "";
                     rs.executeSql(sql_name);
                     if (rs.next()) {
-                        String pro_name = Util.null2String(rs.getString("fyxmmc"));
-                        temp1 += flag1 + pro_name;
-                        flag1 = "/";
+                        pro_name = Util.null2String(rs.getString("fyxmmc"));
+
                     }
+                    if ("1".equals(expType)) {
+                        PZZY = applyNum + applyDate + supllierName + zcms;
+                    } else {
+                        PZZY = applyNum + applyDate + supllierName + pro_name;
+                    }
+                    String sql_update_dt1 = " update " + tableNamedt + " set PZZY='" + PZZY + "' where id= " + dtid;
+                    rs.executeSql(sql_update_dt1);
                 }
-                if ("1".equals(expType)) {
-                    PZZY = applyNum + applyDate + supplName + temp;
-                } else {
-                    PZZY = applyNum + applyDate + supplName + temp1;
-                }
-                String sql_update = " update " + tableName + " set PZZY='" + PZZY + "' where requestid= " + requestid;
-                rs.executeSql(sql_update);
-                log.writeLog("sql_update=" + sql_update);
+
             } else {
-                String temp = "";//资产描述
-                String flag = "";
-                String temp1 = "";//费用项目名称
-                String flag1 = "";
                 //查询明细表1
                 sql = "select * from " + tableNamedt + " where mainid=" + mainID;
                 rs_dt.execute(sql);
@@ -118,31 +116,24 @@ public class FinanceExpenseFI08 implements Action {
                 while (rs_dt.next()) {
                     String zcms = Util.null2String(rs_dt.getString("ZCMS"));
                     String pro_id = Util.null2String(rs_dt.getString("FYXMMC"));
-                    temp += flag + zcms;
-                    flag = "/";
-                    String sql_pro = " select fyxmmc from uf_fyxmdzb where id=" + pro_id;
-                    log.writeLog("sql_pro=" + sql_pro);
-                    rs.executeSql(sql_pro);
+                    String supllierName = Util.null2String(rs_dt.getString("GYSMC"));
+                    String dtid = Util.null2String(rs_dt.getString("id"));
+                    String sql_name = " select fyxmmc from uf_fyxmdzb where id=" + pro_id;
+                    String pro_name = "";
+                    rs.executeSql(sql_name);
                     if (rs.next()) {
-                        String proname = Util.null2String(rs.getString("fyxmmc"));
-                        temp1 += flag1 + proname;
-                        flag1 = "/";
-                    }
-                }
-                if ("1".equals(expType)) {
-                    PZZY = applyDate + supplName + temp;
-                } else {
-                    PZZY = applyDate + supplName + temp1;
-                }
-                String sql_update = " update " + tableName + " set PZZY='" + PZZY + "' where requestid= " + requestid;
-                rs.executeSql(sql_update);
-                log.writeLog("sql_update=" + sql_update);
-                //}
-                //非勾选删除
-                sql = " delete from " + tableNamedt3 + " where mainid = " + mainID + " and XZ = 0";
-                rs.execute(sql);
-                log.writeLog("明细删除:" + sql);
+                        pro_name = Util.null2String(rs.getString("fyxmmc"));
 
+                    }
+                    if ("1".equals(expType)) {
+                        PZZY = applyDate + supllierName + zcms;
+                    } else {
+                        PZZY = applyDate + supllierName + pro_name;
+                    }
+                    String sql_update_dt1 = " update " + tableNamedt + " set PZZY='" + PZZY + "' where id= " + dtid;
+                    rs.executeSql(sql_update_dt1);
+                    log.writeLog("sql_update=" + sql_update_dt1);
+                }
             }
         } else {
 
