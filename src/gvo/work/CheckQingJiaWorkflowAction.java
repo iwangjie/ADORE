@@ -8,7 +8,7 @@ import weaver.interfaces.workflow.action.Action;
 import weaver.soa.workflow.request.RequestInfo;
 
 public class CheckQingJiaWorkflowAction implements Action {
-    GetWebValue getWebValue = new GetWebValue();
+    //GetWebValue getWebValue = new GetWebValue();
 
     public String execute(RequestInfo info) {
         new BaseBean().writeLog("Ω¯»Î«ÎºŸºÏ≤È…Í«Îaction_____________________________");
@@ -68,13 +68,13 @@ public class CheckQingJiaWorkflowAction implements Action {
         qjxss = jhqjxss;
 
         if ("".equals(qjxss) || Double.valueOf(qjxss) == 0) {
-            double temp1 = getWebValue.getValueAction(qjygbh, jhqjksrq, jhqjjsrq, jhqjkssj, jhqjjssj, qjlx);
-            rs.execute("update " + tableName + " set yjgj = " + temp1 + " where requestid = " + info.getRequestid());
+            //double temp1 = getWebValue.getValueAction(qjygbh, jhqjksrq, jhqjjsrq, jhqjkssj, jhqjjssj, qjlx);
+            //rs.execute("update " + tableName + " set yjgj = " + temp1 + " where requestid = " + info.getRequestid());
         }
 
         if (!"".equals(sjqjjsrq) && (sjqjxsh.equals("") || Double.valueOf(sjqjxsh) == 0)) {
-            double temp1 = getWebValue.getValueAction(qjygbh, sjqjksrq, sjqjjsrq, sjqjkssj, sjqjjssj, qjlx);
-            rs.execute("update " + tableName + " set sjqjxsh = " + temp1 + " where requestid = " + info.getRequestid());
+            //double temp1 = getWebValue.getValueAction(qjygbh, sjqjksrq, sjqjjsrq, sjqjkssj, sjqjjssj, qjlx);
+            //rs.execute("update " + tableName + " set sjqjxsh = " + temp1 + " where requestid = " + info.getRequestid());
         }
 
 

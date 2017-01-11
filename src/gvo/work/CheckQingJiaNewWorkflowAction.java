@@ -4,7 +4,7 @@ import weaver.interfaces.workflow.action.Action;
 import weaver.conn.RecordSet;
 import weaver.general.BaseBean;
 import weaver.general.Util;
-import gvo.work.GetWebValue;
+//import gvo.work.GetWebValue;
 import weaver.soa.workflow.request.RequestInfo;
 
 /**
@@ -12,7 +12,7 @@ import weaver.soa.workflow.request.RequestInfo;
  * Çë¼Ù/¹«³ö
  */
 public class CheckQingJiaNewWorkflowAction implements Action {
-    GetWebValue getWebValue = new GetWebValue();
+    //GetWebValue getWebValue = new GetWebValue();
     BaseBean log = new BaseBean();
 
     public String execute(RequestInfo info) {
@@ -66,17 +66,17 @@ public class CheckQingJiaNewWorkflowAction implements Action {
                 String qjxss = jhqjxss;
 
                 if ("".equals(qjxss) || Double.valueOf(qjxss) == 0) {
-                    double temp1 = getWebValue.getValueAction(qjygbh, jhqjksrq, jhqjjsrq, jhqjkssj, jhqjjssj, qjlx);
-                    String sql_dt1 = "update " + tableNamedt + " set yjqjxss = " + temp1 + " where id = " + dtid;
-                    res.execute(sql_dt1);
-                    log.writeLog("sql_dt1---------" + sql_dt1);
+                    //double temp1 = getWebValue.getValueAction(qjygbh, jhqjksrq, jhqjjsrq, jhqjkssj, jhqjjssj, qjlx);
+                    //String sql_dt1 = "update " + tableNamedt + " set yjqjxss = " + temp1 + " where id = " + dtid;
+                    //res.execute(sql_dt1);
+                    //log.writeLog("sql_dt1---------" + sql_dt1);
                 }
 
                 if (!"".equals(sjqjjsrq) && (sjqjxsh.equals("") || Double.valueOf(sjqjxsh) == 0)) {
-                    double temp1 = getWebValue.getValueAction(qjygbh, sjqjksrq, sjqjjsrq, sjqjkssj, sjqjjssj, qjlx);
-                    String sql_dt2 = "update " + tableNamedt + " set sjqjxss = " + temp1 + " where  id = " + dtid;
-                    res.execute(sql_dt2);
-                    log.writeLog("sql_dt2---------" + sql_dt2);
+                    //double temp1 = getWebValue.getValueAction(qjygbh, sjqjksrq, sjqjjsrq, sjqjkssj, sjqjjssj, qjlx);
+                    //String sql_dt2 = "update " + tableNamedt + " set sjqjxss = " + temp1 + " where  id = " + dtid;
+                    //res.execute(sql_dt2);
+                    //log.writeLog("sql_dt2---------" + sql_dt2);
                 }
 
             }
