@@ -69,7 +69,7 @@ public class FinanceExpenseFI08 implements Action {
 
             //冲销是否有勾选
             int isExist = 0;
-            sql = " select count(1) as isExist from " + tableNamedt3 + " where mainid = " + mainID + " and XZ = 0 ";
+            sql = " select count(1) as isExist from " + tableNamedt3 + " where mainid = " + mainID + " and XZ = 1 ";
             rs.execute(sql);
             log.writeLog("是否冲销:" + sql);
             if (rs.next()) {
