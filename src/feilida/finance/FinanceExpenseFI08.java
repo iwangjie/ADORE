@@ -60,7 +60,8 @@ public class FinanceExpenseFI08 implements Action {
             if (rs.next()) {
                 mainID = Util.null2String(rs.getString("ID"));
                 expType = Util.null2String(rs.getString("BXLX"));
-                applyDate = Util.null2String(rs.getString("GZRQ"));
+                //applyDate = Util.null2String(rs.getString("GZRQ"));
+                applyDate = Util.null2String(rs.getString("BXRQ"));
                 if (!"".equals(applyDate)) {
                     applyDate = applyDate.substring(5, 7);
                 }
