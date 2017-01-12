@@ -61,7 +61,9 @@ public class FinanceExpenseFI08 implements Action {
                 mainID = Util.null2String(rs.getString("ID"));
                 expType = Util.null2String(rs.getString("BXLX"));
                 applyDate = Util.null2String(rs.getString("GZRQ"));
-                applyDate = applyDate.substring(5, 7);
+                if (!"".equals(applyDate)) {
+                    applyDate = applyDate.substring(5, 7);
+                }
             }
 
             //冲销是否有勾选
