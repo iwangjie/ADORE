@@ -75,7 +75,8 @@ public class InsertPurchaseOrderNewWorkflowAction implements Action {
             res.execute(sql);
             while (res.next()) {
                 String supplier = Util.null2String(res.getString("gys"));
-                String s_code = supplier.replace(".", "").substring(3, 7);
+                log.writeLog("supplier---------" + supplier);
+                String s_code = supplier.replace(".", "").substring(3);
                 if (!"".equals(supplier)) {
                     String reqid = GRU.getReqid();
 
