@@ -14,10 +14,12 @@ public class replaceMethod {
         str=str.replaceAll("(^|\\.)(\\d{1})(\\.|$)","$100$2$3");
         str=str.substring(0,6);
 
-        String proj_process="市场报价,产品设计客户审核";
-        String proj_processid="NP10,NP09";
-        proj_processid=proj_processid.replaceAll("NP09","NP06");
-        proj_process=proj_process.replaceAll("产品设计客户审核","产品设计");
-        System.out.println(proj_processid);
+        String subStr = "11.02.094";
+        subStr = subStr.replace(".", "").substring(3,7);
+        //String proj_process="市场报价,产品设计客户审核";
+        //String proj_processid="NP10,NP09";
+        //proj_processid=proj_processid.replaceAll("NP09","NP06");
+        //proj_process=proj_process.replaceAll("产品设计客户审核","产品设计");
+        System.out.println(subStr);
     }
 }
