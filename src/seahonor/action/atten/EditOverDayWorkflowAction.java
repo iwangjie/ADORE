@@ -67,7 +67,7 @@ public class EditOverDayWorkflowAction implements Action{
 
                     if (!"".equals(attend_time)) {
                         sql = " update uf_all_attend_info set atten_end_time='"+attend_time+"',is_over_day=1,early_leave_times=0 "
-                        +" where emp_id="+empid+" and atten_day='"+changeDate+"' and isEffective=0 ";
+                        +" where emp_id="+empid+" and atten_day='"+changeDate+"' and isnull(isEffective,0)=0 ";
                         log.writeLog(" sql_update_1= "+sql);
                         res.execute(sql);
 
