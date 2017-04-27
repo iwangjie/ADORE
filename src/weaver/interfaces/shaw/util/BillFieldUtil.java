@@ -1,4 +1,4 @@
-package weaver.interfaces.shaw;
+package weaver.interfaces.shaw.util;
 
 import java.util.HashMap;
 import java.util.Map;
