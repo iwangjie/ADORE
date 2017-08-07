@@ -32,7 +32,7 @@ public class DpSyncOrg {
             HrmSubCompanyBean hsb = new HrmSubCompanyBean();
             hsb.setSubCompanyCode(companycode);
             hsb.setSubCompanyName(companyname);
-            hsb.setSubCompanyDesc(companydesc);
+            hsb.setSubCompanyDesc(companyname);
             // 上级的操作方式     0 是通过id获取  1是通过code获取
             hsb.setIdOrCode(1);
             hsb.setSuperID("");
@@ -74,7 +74,7 @@ public class DpSyncOrg {
             HrmDepartmentBean hdb = new HrmDepartmentBean();
             hdb.setDepartmentcode(departmentcode);
             hdb.setDepartmentname(departmentname);
-            hdb.setDepartmentark(departmentname);
+            hdb.setDepartmentark(departmentmark);
             // 分部的获取操作方式     0 是通过id获取  1是通过code获取
             hdb.setComIdOrCode(1);
             hdb.setSubcompanyid1("");

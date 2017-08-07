@@ -35,6 +35,7 @@ public class CreateProjMissionTest implements Action {
         String tableName = "";
         String mainID = "";
         String tableNameMission = "";
+        String ytlx = "";//业态类型
 
         sql = " Select tablename From Workflow_bill Where id in (select formid from modeinfo where id= " + workflowID + ")";
 
@@ -52,18 +53,21 @@ public class CreateProjMissionTest implements Action {
             rs.execute(sql);
             if (rs.next()) {
                 mainID = Util.null2String(rs.getString("ID"));//获取主表中的id，作为明细表中的mainid
+                ytlx = Util.null2String(rs.getString("ytlx"));
                 log.writeLog("mainID=" + mainID);
             }
 
             //int num_exist = 0;
-            String sql_mission = "select rwmc,fzr,sfkx,ssjd from formtable_main_2790 where sfkx=0 and ssjd=0 ";
+            String sql_mission = "select rwmc,fzr,sfkx,ssjd from formtable_main_2790 where sfkx=0 and ssjd=0 and remark=" + ytlx;
             rs.execute(sql_mission);
             while (rs.next()) {
                 String miName = Util.null2String(rs.getString("rwmc"));
                 String miCharge = Util.null2String(rs.getString("fzr"));
                 log.writeLog("miName=" + miName);
 
-                String sql_0 = " select count(id) as num_cc from formtable_main_2789 where ssxm = " + mainID + " and rwmc = '" + miName + "' and fzr=" + miCharge + " ";
+                //一阶段只生成一条子任务
+                //String sql_0 = " select count(id) as num_cc from formtable_main_2789 where ssxm = " + mainID + " and rwmc = '" + miName + "' and fzr=" + miCharge + " ";
+                String sql_0 = " select count(id) as num_cc from formtable_main_2789 where ssxm = " + mainID;
                 int num_cc = 0;
                 res.executeSql(sql_0);
                 if (res.next()) {
@@ -99,6 +103,8 @@ public class CreateProjMissionTest implements Action {
                         modeRightInfo.editModeDataShareForModeField(Integer.parseInt(miCharge), 588, Integer.parseInt(dataID));
                     }
 
+                } else {
+                    log.writeLog("___________________任务已存在，不需要生成新的任务。");
                 }
             }
 
