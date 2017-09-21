@@ -7,6 +7,8 @@ import weaver.interfaces.shaw.dp.util.*;
 /**
  * Created by adore on 2017/4/21.
  * 德鹏组织结构同步
+ * Update by adore on 2017/9/21
+ * 不同步主次账号信息
  */
 public class DpSyncOrg {
     public String syncOrg() {
@@ -235,6 +237,9 @@ public class DpSyncOrg {
             hrb.addNotUpdate("mobile");
             hrb.addNotUpdate("telephone");
             hrb.addNotUpdate("email");
+
+            hrb.addNotUpdate("accounttype");
+            hrb.addNotUpdate("belongto");
 
             /**
              *  当然可以下还有 都可以设置  在HrmResourceBean中，可以set值
