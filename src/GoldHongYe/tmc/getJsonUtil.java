@@ -8,15 +8,15 @@ import org.json.JSONObject;
  */
 public class getJsonUtil {
     public static void jsonArrayTest() {
-        try{
-        JSONArray jsonarray = new JSONArray("[{'name':'xiazdong','age':20},{'name':'xzdong','age':15}]");
-        for (int i = 0; i < jsonarray.length(); i++) {
-            JSONObject jsonobj = jsonarray.getJSONObject(i);
-            String name = jsonobj.getString("name");
-            int age = jsonobj.getInt("age");
-            System.out.println("name = " + name + ",age = " + age);
-        }
-        }catch (Exception e){
+        try {
+            JSONArray jsonarray = new JSONArray("[{'name':'xiazdong','age':20},{'name':'xzdong','age':15}]");
+            for (int i = 0; i < jsonarray.length(); i++) {
+                JSONObject jsonobj = jsonarray.getJSONObject(i);
+                String name = jsonobj.getString("name");
+                int age = jsonobj.getInt("age");
+                System.out.println("name = " + name + ",age = " + age);
+            }
+        } catch (Exception e) {
             System.out.println("ERROR");
         }
     }
