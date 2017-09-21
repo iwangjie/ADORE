@@ -3,6 +3,7 @@ package yeo.action.purchase;
 import weaver.conn.RecordSet;
 import weaver.general.BaseBean;
 import weaver.general.Util;
+import weaver.interfaces.shaw.util.ReplaceBlankUtil;
 import weaver.interfaces.workflow.action.Action;
 import weaver.soa.workflow.request.RequestInfo;
 import yeo.util.InsertUtil;
@@ -13,8 +14,11 @@ import java.util.Map;
 /**
  * Created by adore on 16/8/29.
  * 销售订单（固安）
+ * UPDATE BY adore on 17/8/20
+ * 单据头增加字段：实际订单号     推送数据到中间表
+ * 数据库字段对应     OA（sjddh）→中间表（OAsjddh）
  */
-public class InsertSaleOrderWorkflowAction implements Action{
+public class InsertSaleOrderWorkflowAction implements Action {
     public String execute(RequestInfo info) {
 
         BaseBean log = new BaseBean();
@@ -24,6 +28,7 @@ public class InsertSaleOrderWorkflowAction implements Action{
         RecordSet rs = new RecordSet();
 
         InsertUtil IU = new InsertUtil();
+
 
         String sql = "";
         String tableName = "";
@@ -43,6 +48,7 @@ public class InsertSaleOrderWorkflowAction implements Action{
         String M_RANGE = "";
         String M_PRO = "";
         //String FSign = "";//1固安；2北京
+        String OAsjddh = "";
         String requestid = info.getRequestid();
         String workflowid = info.getWorkflowid();
 
@@ -64,6 +70,7 @@ public class InsertSaleOrderWorkflowAction implements Action{
                 M_DEP = Util.null2String(rs.getString("M_DEP"));
                 M_CUSTOMER = Util.null2String(rs.getString("GHDW"));
                 M_ABS = Util.null2String(rs.getString("zy"));
+                M_ABS = ReplaceBlankUtil.replaceBlank(M_ABS);//去空格、换行
                 M_CURR = Util.null2String(rs.getString("bz_new"));
                 M_RATE = Util.null2String(rs.getString("hl"));
                 M_USER = Util.null2String(rs.getString("M_USER"));
@@ -71,6 +78,8 @@ public class InsertSaleOrderWorkflowAction implements Action{
                 M_PRO = Util.null2String(rs.getString("XMMC"));
                 M_CONTNO = Util.null2String(rs.getString("HTH"));
                 M_RANGE = Util.null2String(rs.getString("M_RANGE_new"));
+                OAsjddh = Util.null2String(rs.getString("sjddh"));
+                OAsjddh = ReplaceBlankUtil.replaceBlank(OAsjddh);
 
                 Map<String, String> mapStr_M = new HashMap<String, String>();
                 mapStr_M.put("ID", Main_id);
@@ -88,6 +97,7 @@ public class InsertSaleOrderWorkflowAction implements Action{
                 mapStr_M.put("M_PRO", M_PRO);
                 mapStr_M.put("M_CONTNO", M_CONTNO);
                 mapStr_M.put("M_RANGE", M_RANGE);
+                mapStr_M.put("OAsjddh", OAsjddh);
 
                 String table_M = "OA_ERP.dbo.Sale_M";
                 IU.insert(mapStr_M, table_M);
@@ -105,6 +115,7 @@ public class InsertSaleOrderWorkflowAction implements Action{
                 String D_XPRICE = Util.null2String(rs.getString("XXSE"));
                 String D_MONEY = Util.null2String(rs.getString("jshj"));
                 String D_REMARK = Util.null2String(rs.getString("bz"));
+                D_REMARK = ReplaceBlankUtil.replaceBlank(D_REMARK);
                 String D_DATE = Util.null2String(rs.getString("jhrq1"));
                 //String D_SUPPLIER = Util.null2String(rs.getString("gys"));
 

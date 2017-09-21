@@ -5,6 +5,7 @@ import weaver.general.BaseBean;
 import weaver.general.Util;
 import weaver.interfaces.workflow.action.Action;
 import weaver.soa.workflow.request.RequestInfo;
+import weaver.interfaces.shaw.util.ReplaceBlankUtil;
 import yeo.util.InsertUtil;
 
 import java.util.HashMap;
@@ -13,8 +14,10 @@ import java.util.Map;
 /**
  * Created by adore on 16/9/1.
  * 一般性费用报销（固安）
+ * Updated on 17/8/24 字段去空格
+ * 一般费用报销	事由	sy	Expen_1_D	D_ABS
  */
-public class InsertExpen1WorkflowAction implements Action{
+public class InsertExpen1WorkflowAction implements Action {
     public String execute(RequestInfo info) {
 
         BaseBean log = new BaseBean();
@@ -75,6 +78,7 @@ public class InsertExpen1WorkflowAction implements Action{
             rs.execute(sql);
             while (rs.next()) {
                 String D_ABS = Util.null2String(rs.getString("sy"));
+                D_ABS = ReplaceBlankUtil.replaceBlank(D_ABS);
                 String D_JSUBJ = Util.null2String(rs.getString("bxkm"));
                 String D_JMONEY = Util.null2String(rs.getString("je"));
                 String D_DEP = Util.null2String(rs.getString("D_DEP"));
@@ -98,7 +102,7 @@ public class InsertExpen1WorkflowAction implements Action{
                 IU.insert(mapStr_D, table_D);
                 log.writeLog("明细1插入成功-----------");
             }
-            tableNamedt2 =  tableName + "_dt2";
+            tableNamedt2 = tableName + "_dt2";
 
             //查询明细表2
             sql = "select * from " + tableNamedt2 + " where mainid=" + Main_id;

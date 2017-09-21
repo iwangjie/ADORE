@@ -3,6 +3,7 @@ package yeo.action.purchase;
 import weaver.conn.RecordSet;
 import weaver.general.BaseBean;
 import weaver.general.Util;
+import weaver.interfaces.shaw.util.ReplaceBlankUtil;
 import weaver.interfaces.workflow.action.Action;
 import weaver.soa.workflow.request.RequestInfo;
 import yeo.util.InsertUtil;
@@ -13,6 +14,8 @@ import java.util.Map;
 /**
  * Created by adore on 16/9/1.
  * 非现金报销
+ * Update on 17/8/24 字段去空格
+ * 非现金报销	事由	sy	Expen_4_M	D_ABS
  */
 public class InsertExpen4WorkflowAction implements Action {
     public String execute(RequestInfo info) {
@@ -68,6 +71,7 @@ public class InsertExpen4WorkflowAction implements Action {
                 Main_id = Util.null2String(rs.getString("id"));
                 M_JUDE = Util.null2String(rs.getString("M_JUDE"));
                 D_ABS = Util.null2String(rs.getString("sy"));
+                D_ABS = ReplaceBlankUtil.replaceBlank(D_ABS);
                 D_JMONEY = Util.null2String(rs.getString("dxje"));
                 D_DSUBJ = Util.null2String(rs.getString("dfkm"));
                 D_DEP = Util.null2String(rs.getString("D_DEP"));

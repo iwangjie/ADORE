@@ -3,6 +3,7 @@ package yeo.action.purchase;
 import weaver.conn.RecordSet;
 import weaver.general.BaseBean;
 import weaver.general.Util;
+import weaver.interfaces.shaw.util.ReplaceBlankUtil;
 import weaver.interfaces.workflow.action.Action;
 import weaver.soa.workflow.request.RequestInfo;
 import yeo.util.InsertUtil;
@@ -13,6 +14,8 @@ import java.util.Map;
 /**
  * Created by adore on 16/9/1.
  * 差旅费用报销
+ * Updated on 17/8/24 字段去空格
+ * 差旅费用报销	事由	sy	Expen_1_D	D_ABS
  */
 public class InsertExpen2WorkflowAction implements Action {
     public String execute(RequestInfo info) {
@@ -76,6 +79,7 @@ public class InsertExpen2WorkflowAction implements Action {
             rs.execute(sql);
             while (rs.next()) {
                 String D_ABS = Util.null2String(rs.getString("sy"));
+                D_ABS = ReplaceBlankUtil.replaceBlank(D_ABS);
                 String D_JSUBJ = Util.null2String(rs.getString("bxkm"));
                 String D_JMONEY = Util.null2String(rs.getString("je"));
                 //String D_DSUBJ = Util.null2String(rs.getString("dfkm"));

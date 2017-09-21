@@ -3,6 +3,7 @@ package yeo.action.purchase;
 import weaver.conn.RecordSet;
 import weaver.general.BaseBean;
 import weaver.general.Util;
+import weaver.interfaces.shaw.util.ReplaceBlankUtil;
 import weaver.interfaces.workflow.action.Action;
 import weaver.soa.workflow.request.RequestInfo;
 import yeo.util.GetReqidUtil;
@@ -15,6 +16,9 @@ import java.util.Map;
  * Created by adore on 16/9/6.
  * 采购订单流程(新)
  * UPDATE ON 16/12/19:明细有几个不同的供应商,主表就要几个不同的M_CODE(主表不重复生成),总的明细条数不变
+ * <p>
+ * UPDATE ON 17/8/20:推送申请人字段的申请人工号到中间表，推送流程发起日期到中间表。
+ * 数据库字段对应     OA（sqrgh）→中间表（M_quester）     OA（sqrqerp）→中间表（OAsqsj）
  */
 public class InsertPurchaseOrderNewWorkflowAction implements Action {
     public String execute(RequestInfo info) {
@@ -43,6 +47,8 @@ public class InsertPurchaseOrderNewWorkflowAction implements Action {
         String M_SUSER = "";
         //String M_TOU = "YG0046";//最初是工号
         String M_TOU = "02";
+        String M_quester = "";
+        String OAsqsj = "";
         String requestid = info.getRequestid();
         String workflowid = info.getWorkflowid();
 
@@ -64,10 +70,13 @@ public class InsertPurchaseOrderNewWorkflowAction implements Action {
                 M_DEP = Util.null2String(rs.getString("M_DEP"));
                 M_CODE = Util.null2String(rs.getString("bh"));
                 M_ABS = Util.null2String(rs.getString("zy"));
+                M_ABS = ReplaceBlankUtil.replaceBlank(M_ABS);//去空格 换行符
                 M_CURR = Util.null2String(rs.getString("bz_new"));
                 M_RATE = Util.null2String(rs.getString("hr"));
                 M_USER = Util.null2String(rs.getString("M_USER"));
                 M_SUSER = Util.null2String(rs.getString("M_SUSER"));
+                M_quester = Util.null2String(rs.getString("sqrgh"));
+                OAsqsj = Util.null2String(rs.getString("sqrqerp"));
             }
             //查询明细表
             sql = "select gys from " + tableNamedt + " where mainid=" + Main_id + " group by gys ";
@@ -98,6 +107,8 @@ public class InsertPurchaseOrderNewWorkflowAction implements Action {
                     mapStr_M.put("M_DATE", "##CONVERT(varchar(10) ,GETDATE(), 23 )");
                     //mapStr_M.put("modedatacreatetime", "##CONVERT(varchar(5) ,GETDATE(), 114 )");
                     mapStr_M.put("M_TOU", M_TOU);
+                    mapStr_M.put("M_quester", M_quester);
+                    mapStr_M.put("OAsqsj", OAsqsj);
 
                     String table_M = "OA_ERP.dbo.Pur_M";
                     IU.insert(mapStr_M, table_M);
@@ -115,6 +126,7 @@ public class InsertPurchaseOrderNewWorkflowAction implements Action {
                         String D_XPRICE = Util.null2String(rs.getString("se"));
                         String D_MONEY = Util.null2String(rs.getString("jshj"));
                         String D_REMARK = Util.null2String(rs.getString("bz"));
+                        D_REMARK = ReplaceBlankUtil.replaceBlank(D_REMARK);
                         String D_DATE = Util.null2String(rs.getString("jhrq"));
 
 
