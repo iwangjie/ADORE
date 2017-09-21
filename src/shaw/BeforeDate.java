@@ -44,5 +44,10 @@ public class BeforeDate {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        String s = "my.test.txt";
+        System.out.println(s.replace(".", "#"));
+        System.out.println(s.replaceAll("\\.", "#"));
+        System.out.println(s.replaceFirst(".", "#"));
     }
 }
